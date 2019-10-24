@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Playbook</string>
+    <string name="play_title_hint">Enter a title for the play.</string>
+    <string name="play_title_label">Title</string>
+    <string name="play_description_hint">Enter a description for the play.</string>
+    <string name="play_description_label">Description</string>
+</resources>
