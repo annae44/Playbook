@@ -20,6 +20,9 @@
         <activity android:name=".MainActivity">
         </activity>
 
+        <activity android:name=".PlayPagerActivity">
+        </activity>
+
     </application>
 
 </manifest>

@@ -1,14 +1,20 @@
 package aericks1.example.playbook;
 
+import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
 public class PlayLab {
+    // SEE PAGE 277 FOR DEMOLITION
     private static PlayLab sPlayLab;
     private List<Play> mPlays;
+    private Context mContext;
+    private SQLiteDatabase mDatabase;
 
     public static PlayLab get(Context context) {
         if (sPlayLab == null) {
@@ -17,10 +23,12 @@ public class PlayLab {
         return sPlayLab;
     }
 
-    // fully loaded model layer with 1000 plays
+
     public PlayLab(Context context) {
+        mContext = context.getApplicationContext();
+        mDatabase = new PlayBaseHelper(mContext).getWritableDatabase();
         mPlays = new ArrayList<>();
-        for (int i = 0; i < 100; i++) {
+        for (int i = 0; i < 10; i++) {
             Play play = new Play();
             play.setTitle("Play #" + i);
             mPlays.add(play);
@@ -29,14 +37,77 @@ public class PlayLab {
 
     public List<Play> getPlays() {
         return mPlays;
+        /* uncomment for database to work
+        List<Play> plays = new ArrayList<>();
+
+        PlayCursorWrapper cursor = queryPlays(null ,null);
+
+        try {
+            cursor.moveToFirst();
+            while(!cursor.isAfterLast()){
+                plays.add(cursor.getPlay());
+                cursor.moveToNext();
+            }
+        } finally {
+            cursor.close();
+        }
+        return plays;
+
+         */
     }
 
     public Play getPlay(UUID id) {
-        for (Play play : mPlays) {
+        /* uncomment for database to work
+        PlayCursorWrapper cursor = queryPlays(PlayDbSchema.PlayTable.Cols.UUID + " = ?",
+                                              new String[] {id.toString()});
+        try {
+            if (cursor.getCount() == 0){
+                return null;
+            }
+            cursor.moveToFirst();
+            return cursor.getPlay();
+        } finally {
+            cursor.close();
+        }
+        */
+         for (Play play : mPlays) {
             if (play.getId().equals(id)) {
                 return play;
             }
         }
         return null;
+    }
+
+    public void updatePlay(Play play){
+        String uuidString = play.getId().toString();
+        ContentValues values = getContentValues(play);
+
+        mDatabase.update(PlayDbSchema.PlayTable.NAME, values,
+                PlayDbSchema.PlayTable.Cols.UUID + " = ?",
+                new String[] {uuidString});
+    }
+
+    private PlayCursorWrapper queryPlays(String whereClause, String[] whereArgs) {
+        Cursor cursor = mDatabase.query(PlayDbSchema.PlayTable.NAME,
+                               null,
+                                        whereClause,
+                                        whereArgs,
+                                null,
+                                 null,
+                                null);
+        return new PlayCursorWrapper(cursor);
+    }
+
+    private static ContentValues getContentValues(Play play) {
+        ContentValues values = new ContentValues();
+        values.put(PlayDbSchema.PlayTable.Cols.UUID, play.getId().toString());
+        values.put(PlayDbSchema.PlayTable.Cols.TITLE, play.getTitle());
+        values.put(PlayDbSchema.PlayTable.Cols.DESCRIPTION, play.getDescription());
+        return values;
+    }
+
+    public void addPlay(Play p){
+        ContentValues values = getContentValues(p);
+        mDatabase.insert(PlayDbSchema.PlayTable.NAME, null, values);
     }
 }

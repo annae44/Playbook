@@ -1,17 +1,19 @@
 package aericks1.example.playbook;
 
-import android.media.Image;
-
 import java.util.UUID;
 
 public class Play {
     private UUID mId;
     private String mtitle;
     private String mDescription;
-    private Image mImage;
 
     public Play(){
-        mId = UUID.randomUUID();
+        //mId = UUID.randomUUID();
+        this(UUID.randomUUID());
+    }
+
+    public Play(UUID id) {
+        mId = id;
     }
 
     public UUID getId() {
@@ -26,19 +28,11 @@ public class Play {
         return mDescription;
     }
 
-    public Image getImage() {
-        return mImage;
-    }
-
     public void setTitle(String title) {
         mtitle = title;
     }
 
     public void setDescription(String description) {
         mDescription = description;
-    }
-
-    public void setImage(Image image){
-        mImage = image;
     }
 }

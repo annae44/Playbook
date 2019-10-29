@@ -39,6 +39,7 @@ public class PlayListFragment extends Fragment {
             mAdapter = new PlayAdapter(plays);
             mPlayRecyclerView.setAdapter(mAdapter);
         } else {
+            mAdapter.setPlays(plays);
             mAdapter.notifyDataSetChanged();
         }
     }
@@ -61,7 +62,8 @@ public class PlayListFragment extends Fragment {
         @Override
         public void onClick(View view) {
             //Intent intent = new Intent(getActivity(), MainActivity.class);
-            Intent intent = MainActivity.newIntent(getActivity(), mPlay.getId());
+            //Intent intent = MainActivity.newIntent(getActivity(), mPlay.getId());
+            Intent intent = PlayPagerActivity.newIntent(getActivity(), mPlay.getId());
             startActivity(intent);
         }
     }
@@ -88,6 +90,10 @@ public class PlayListFragment extends Fragment {
         @Override
         public int getItemCount() {
             return mPlays.size();
+        }
+
+        public void setPlays(List<Play> plays) {
+            mPlays = plays;
         }
     }
 }
