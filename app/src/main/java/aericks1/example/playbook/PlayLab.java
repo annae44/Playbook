@@ -5,7 +5,6 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -29,7 +28,7 @@ public class PlayLab {
         mContext = context.getApplicationContext();
         mDatabase = new PlayBaseHelper(mContext).getWritableDatabase();
         mPlays = new ArrayList<>();
-        for (int i = 0; i < 20; i++) {
+        for (int i = 1; i <= 25; i++) {
             Play play = new Play();
             play.setTitle("Play #" + i);
             mPlays.add(play);
@@ -77,11 +76,6 @@ public class PlayLab {
             }
         }
         return null;
-    }
-
-    public File getPhotoFile(Play play) {
-        File filesDir = mContext.getFilesDir();
-        return new File(filesDir, play.getPhotoFilename());
     }
 
     public void updatePlay(Play play){
