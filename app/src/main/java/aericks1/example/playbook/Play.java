@@ -28,6 +28,10 @@ public class Play {
         return mDescription;
     }
 
+    public String getPhotoFilename() {
+        return "IMG_" + getId().toString() + ".jpg";
+    }
+
     public void setTitle(String title) {
         mtitle = title;
     }

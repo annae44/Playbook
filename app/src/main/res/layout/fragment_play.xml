@@ -32,11 +32,17 @@
         android:hint="@string/play_description_hint"/>
 
     <ImageView
-        android:id="@+id/imageView"
+        android:id="@+id/play_photo"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:minHeight="400dp"
         app:srcCompat="@drawable/play_image_placeholder" />
+
+    <ImageButton
+        android:id="@+id/play_camera"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Take Photo" />
 
 
 </LinearLayout>
