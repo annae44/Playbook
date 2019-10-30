@@ -3,6 +3,7 @@ package aericks1.example.playbook;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -42,6 +43,15 @@ public class PlayFragment extends Fragment {
         PlayFragment fragment = new PlayFragment();
         fragment.setArguments(args);
         return fragment;
+    }
+
+    private void updatePhotoView() {
+        if (mPhotoFile == null || !mPhotoFile.exists()) {
+            mPhotoView.setImageDrawable(null);
+        } else {
+            Bitmap bitmap = PictureUtils.getScaledBitmap(mPhotoFile.getPath(), getActivity());
+            mPhotoView.setImageBitmap(bitmap);
+        }
     }
 
     @Override
@@ -115,7 +125,7 @@ public class PlayFragment extends Fragment {
         mPhotoButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick( View v) {
-                Uri uri = FileProvider.getUriForFile(getActivity(),"com.mydomain.fileprovider", mPhotoFile);
+                Uri uri = FileProvider.getUriForFile(getActivity(),"aericks1.example.playbook.fileprovider", mPhotoFile);
                 captureImage.putExtra(MediaStore.EXTRA_OUTPUT, uri);
 
                 List<ResolveInfo> cameraActivities = getActivity().getPackageManager().
@@ -131,6 +141,7 @@ public class PlayFragment extends Fragment {
 
 
         mPhotoView = (ImageView) v.findViewById(R.id.play_photo);
+        // updatePhotoView(); Undo LATER!! 
 
         return v;
     }

@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -109,5 +110,10 @@ public class PlayLab {
     public void addPlay(Play p){
         ContentValues values = getContentValues(p);
         mDatabase.insert(PlayDbSchema.PlayTable.NAME, null, values);
+    }
+
+    public File getPhotoFile (Play play) {
+        File filesDir = mContext.getFilesDir();
+        return new File(filesDir, play.getPhotoFilename());
     }
 }
