@@ -13,7 +13,7 @@ import java.util.UUID;
 public class PlayLab {
     // SEE PAGE 277 FOR DEMOLITION
     private static PlayLab sPlayLab;
-    private List<Play> mPlays;
+    //private List<Play> mPlays;
     private Context mContext;
     private SQLiteDatabase mDatabase;
 
@@ -28,19 +28,16 @@ public class PlayLab {
     public PlayLab(Context context) {
         mContext = context.getApplicationContext();
         mDatabase = new PlayBaseHelper(mContext).getWritableDatabase();
-        mPlays = new ArrayList<>();
-        for (int i = 1; i <= 25; i++) {
-            Play play = new Play();
-            play.setTitle("Play #" + i);
-            mPlays.add(play);
-        }
+        //mPlays = new ArrayList<>();
+        //for (int i = 1; i <= 25; i++) {
+        //    Play play = new Play();
+        //    play.setTitle("Play #" + i);
+        //    mPlays.add(play);
+        //}
     }
 
     public List<Play> getPlays() {
-        return mPlays;
-        /* uncomment for database to work
         List<Play> plays = new ArrayList<>();
-
         PlayCursorWrapper cursor = queryPlays(null ,null);
 
         try {
@@ -53,16 +50,14 @@ public class PlayLab {
             cursor.close();
         }
         return plays;
-
-         */
     }
 
     public Play getPlay(UUID id) {
-        /* uncomment for database to work
+
         PlayCursorWrapper cursor = queryPlays(PlayDbSchema.PlayTable.Cols.UUID + " = ?",
-                                              new String[] {id.toString()});
+                new String[]{id.toString()});
         try {
-            if (cursor.getCount() == 0){
+            if (cursor.getCount() == 0) {
                 return null;
             }
             cursor.moveToFirst();
@@ -70,13 +65,6 @@ public class PlayLab {
         } finally {
             cursor.close();
         }
-        */
-         for (Play play : mPlays) {
-            if (play.getId().equals(id)) {
-                return play;
-            }
-        }
-        return null;
     }
 
     public void updatePlay(Play play){
@@ -107,7 +95,7 @@ public class PlayLab {
         return values;
     }
 
-    public void addPlay(Play p){
+    public void addPlay(Play p) {
         ContentValues values = getContentValues(p);
         mDatabase.insert(PlayDbSchema.PlayTable.NAME, null, values);
     }

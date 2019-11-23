@@ -10,6 +10,9 @@ import android.provider.MediaStore;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
@@ -57,10 +60,30 @@ public class PlayFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
 
         UUID playId = (UUID) getArguments().getSerializable((ARG_PLAY_ID));
         mPlay = PlayLab.get(getActivity()).getPlay(playId);
         mPhotoFile = PlayLab.get(getActivity()).getPhotoFile(mPlay);
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater menuInflater) {
+        super.onCreateOptionsMenu(menu, menuInflater);
+        menuInflater.inflate(R.menu.fragement_play, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.delete_play:
+                // UNSURE WHAT TO DO HERE... CH 13 Challenge - might have to change in manifest
+                //Intent intent = PlayListActivity.newIntent(getActivity());
+                //startActivity(intent);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     @Override
@@ -139,10 +162,18 @@ public class PlayFragment extends Fragment {
             }
         });
 
-
         mPhotoView = (ImageView) v.findViewById(R.id.play_photo);
-        // updatePhotoView(); Undo LATER!!
+        updatePhotoView();
 
         return v;
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == REQUEST_PHOTO) {
+            Uri uri = FileProvider.getUriForFile(getActivity(), "aericks1.example.playbook.fileprovider", mPhotoFile);
+            getActivity().revokeUriPermission(uri, Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+            updatePhotoView();
+        }
     }
 }
