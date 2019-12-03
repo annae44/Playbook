@@ -15,6 +15,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageSwitcher;
@@ -36,6 +37,7 @@ public class PlayFragment extends Fragment {
     private ImageButton mPhotoButton;
     private ImageView mPhotoView;
     private File mPhotoFile;
+    private Button mSendButton;
     public static final String ARG_PLAY_ID = "Play ID";
 
     private static final int REQUEST_PHOTO = 2;
@@ -78,8 +80,8 @@ public class PlayFragment extends Fragment {
         switch (item.getItemId()) {
             case R.id.delete_play:
                 // UNSURE WHAT TO DO HERE... CH 13 Challenge - might have to change in manifest
-                //Intent intent = PlayListActivity.newIntent(getActivity());
-                //startActivity(intent);
+                PlayLab.get(getActivity()).deletePlay(mPlay);
+                getActivity().finish();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -134,6 +136,18 @@ public class PlayFragment extends Fragment {
             }
         });
 
+        mSendButton = (Button) v.findViewById(R.id.send_button);
+        mSendButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Intent i = new Intent(Intent.ACTION_SEND);
+                i.setType("text/plain");
+                i.putExtra(Intent.EXTRA_TEXT, getPlayReport());
+                i.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.report_subject));
+                i = Intent.createChooser(i, getString(R.string.send_play));
+                startActivity(i);
+            }
+        });
+
         PackageManager packageManager = getActivity().getPackageManager();
 
 
@@ -175,5 +189,25 @@ public class PlayFragment extends Fragment {
             getActivity().revokeUriPermission(uri, Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
             updatePhotoView();
         }
+    }
+
+    private String getPlayReport() {
+        String t = mPlay.getTitle();
+        if (t == null) {
+            t = getString(R.string.report_play_no_title);
+        } else {
+            t = getString(R.string.report_play_title, t);
+        }
+
+        String d = mPlay.getDescription();
+        if (d == null) {
+            d = getString(R.string.report_play_no_desc);
+        } else {
+            d = getString(R.string.report_play_desc, d);
+        }
+
+        String report = getString(R.string.report_format, t, d);
+
+        return report;
     }
 }

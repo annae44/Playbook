@@ -6,4 +6,12 @@
     <string name="play_title_label">Title</string>
     <string name="play_description_hint">Enter a description for the play.</string>
     <string name="play_description_label">Description</string>
+    <string name="send_play">Send Play</string>
+    <string name="report_subject">Playbook Play</string>
+    <string name="report_format">Title: %1$s. Description: %2$s.</string>
+    <string name="report_play_title">%s</string>
+    <string name="report_play_no_title">Non-titled Play</string>
+    <string name="report_play_desc">%s</string>
+    <string name="report_play_no_desc">No description provided</string>
+    <string name="send_play_via">Send play via</string>
 </resources>

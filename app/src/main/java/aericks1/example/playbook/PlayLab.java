@@ -28,12 +28,6 @@ public class PlayLab {
     public PlayLab(Context context) {
         mContext = context.getApplicationContext();
         mDatabase = new PlayBaseHelper(mContext).getWritableDatabase();
-        //mPlays = new ArrayList<>();
-        //for (int i = 1; i <= 25; i++) {
-        //    Play play = new Play();
-        //    play.setTitle("Play #" + i);
-        //    mPlays.add(play);
-        //}
     }
 
     public List<Play> getPlays() {
@@ -98,6 +92,13 @@ public class PlayLab {
     public void addPlay(Play p) {
         ContentValues values = getContentValues(p);
         mDatabase.insert(PlayDbSchema.PlayTable.NAME, null, values);
+    }
+
+    public void deletePlay(Play p) {
+        //ContentValues values = getContentValues(p);
+        mDatabase.delete(PlayDbSchema.PlayTable.NAME,
+                        PlayDbSchema.PlayTable.Cols.UUID + " = ?",
+                         new String[]{p.getId().toString()});
     }
 
     public File getPhotoFile (Play play) {
